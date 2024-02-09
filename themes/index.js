@@ -9,7 +9,7 @@ import * as nobelium from './nobelium'
 import * as matery from './matery'
 import * as example from './example'
 import * as simple from './simple'
-import * as mengyao from './mengyao'
+// import * as mengyao from './mengyao'
 
 export const ALL_THEME = [
   'hexo',
@@ -20,7 +20,7 @@ export const ALL_THEME = [
   'nobelium',
   'example',
   'simple',
-  'mengyao'
+  // 'mengyao'
 ]
 export {
   hexo,
@@ -31,5 +31,5 @@ export {
   matery,
   example,
   simple,
-  mengyao
+  // mengyao
 }
