@@ -74,6 +74,10 @@ export const getLayoutNameByPath = (path) => {
       return 'LayoutTagIndex'
     case '/category':
       return 'LayoutCategoryIndex'
+    case '/about':
+      return 'LayoutAbout'
+    case '/contact':
+      return 'LayoutContact'
     default:
       return 'LayoutSlug'
   }
