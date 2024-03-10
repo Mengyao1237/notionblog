@@ -12,9 +12,13 @@ export const { THEMES = [] } = getConfig().publicRuntimeConfig
  * @param {*} themeQuery
  * @returns
  */
-export const getGlobalLayoutByTheme = (themeQuery) => {
+export const getGlobalLayoutByTheme = themeQuery => {
   if (themeQuery !== BLOG.THEME) {
-    return dynamic(() => import(`@/themes/${themeQuery}`).then(m => m[getLayoutNameByPath(-1)]), { ssr: true })
+    return dynamic(
+      () =>
+        import(`@/themes/${themeQuery}`).then(m => m[getLayoutNameByPath(-1)]),
+      { ssr: true }
+    )
   } else {
     return ThemeComponents[getLayoutNameByPath('-1')]
   }
@@ -29,23 +33,29 @@ export const getGlobalLayoutByTheme = (themeQuery) => {
 export const getLayoutByTheme = ({ router, theme }) => {
   const themeQuery = getQueryParam(router.asPath, 'theme') || theme
   if (themeQuery !== BLOG.THEME) {
-    return dynamic(() => import(`@/themes/${themeQuery}`).then(m => {
-      setTimeout(() => {
-        checkThemeDOM()
-      }, 500);
+    return dynamic(
+      () =>
+        import(`@/themes/${themeQuery}`).then(m => {
+          setTimeout(() => {
+            checkThemeDOM()
+          }, 500)
 
-      const components = m[getLayoutNameByPath(router.pathname, router.asPath)]
-      if (components) {
-        return components
-      } else {
-        return m.LayoutSlug
-      }
-    }), { ssr: true })
+          const components =
+            m[getLayoutNameByPath(router.pathname, router.asPath)]
+          if (components) {
+            return components
+          } else {
+            return m.LayoutSlug
+          }
+        }),
+      { ssr: true }
+    )
   } else {
     setTimeout(() => {
       checkThemeDOM()
-    }, 100);
-    const components = ThemeComponents[getLayoutNameByPath(router.pathname, router.asPath)]
+    }, 100)
+    const components =
+      ThemeComponents[getLayoutNameByPath(router.pathname, router.asPath)]
     if (components) {
       return components
     } else {
@@ -59,12 +69,12 @@ export const getLayoutByTheme = ({ router, theme }) => {
  * @param {*} path
  * @returns
  */
-const getLayoutNameByPath = (path) => {
+const getLayoutNameByPath = path => {
   if (LAYOUT_MAPPINGS[path]) {
-    return LAYOUT_MAPPINGS[path];
+    return LAYOUT_MAPPINGS[path]
   } else {
     // 没有特殊处理的路径返回默认layout名称
-    return 'LayoutSlug';
+    return 'LayoutSlug'
   }
 }
 
@@ -90,7 +100,7 @@ const checkThemeDOM = () => {
  * @param updateDarkMode 更改主题ChangeState函数
  * @description 读取cookie中存的用户主题
  */
-export const initDarkMode = (updateDarkMode) => {
+export const initDarkMode = updateDarkMode => {
   // 查看用户设备浏览器是否深色模型
   let newDarkMode = isPreferDark()
 
@@ -108,7 +118,9 @@ export const initDarkMode = (updateDarkMode) => {
 
   updateDarkMode(newDarkMode)
   saveDarkModeToLocalStorage(newDarkMode)
-  document.getElementsByTagName('html')[0].setAttribute('class', newDarkMode ? 'dark' : 'light')
+  document
+    .getElementsByTagName('html')[0]
+    .setAttribute('class', newDarkMode ? 'dark' : 'light')
 }
 
 /**
@@ -122,8 +134,15 @@ export function isPreferDark() {
   if (BLOG.APPEARANCE === 'auto') {
     // 系统深色模式或时间是夜间时，强行置为夜间模式
     const date = new Date()
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-    return prefersDarkMode || (BLOG.APPEARANCE_DARK_TIME && (date.getHours() >= BLOG.APPEARANCE_DARK_TIME[0] || date.getHours() < BLOG.APPEARANCE_DARK_TIME[1]))
+    const prefersDarkMode = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches
+    return (
+      prefersDarkMode ||
+      (BLOG.APPEARANCE_DARK_TIME &&
+        (date.getHours() >= BLOG.APPEARANCE_DARK_TIME[0] ||
+          date.getHours() < BLOG.APPEARANCE_DARK_TIME[1]))
+    )
   }
   return false
 }
@@ -137,9 +156,9 @@ export const loadDarkModeFromLocalStorage = () => {
 }
 
 /**
-   * 保存深色模式
-   * @param newTheme
-   */
-export const saveDarkModeToLocalStorage = (newTheme) => {
+ * 保存深色模式
+ * @param newTheme
+ */
+export const saveDarkModeToLocalStorage = newTheme => {
   localStorage.setItem('darkMode', newTheme)
 }
