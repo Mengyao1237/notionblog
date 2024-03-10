@@ -13,7 +13,10 @@ const AboutIndex = props => {
   const { locale } = useGlobal()
 
   // 根据页面路径加载不同Layout文件
-  const Layout = getLayoutByTheme({ theme: siteConfig('THEME'), router: useRouter() })
+  const Layout = getLayoutByTheme({
+    theme: siteConfig('THEME'),
+    router: useRouter()
+  })
 
   useEffect(() => {
     if (isBrowser) {
@@ -38,16 +41,16 @@ const AboutIndex = props => {
   }
 
   props = { ...props, meta }
-  console.log("🚀 ~ file: index.js:41 ~ AboutIndex ~ props:", props)
 
   return <Layout {...props} />
 }
 
 export async function getStaticProps() {
   const props = await getGlobalData({ from: 'about-index' })
-  console.log("🚀 ~ file: index.js:47 ~ getStaticProps ~ props:", props)
   // 处理分页
-  props.posts = props.allPages?.filter(page => page.type === 'Post' && page.status === 'Published')
+  props.posts = props.allPages?.filter(
+    page => page.type === 'Post' && page.status === 'Published'
+  )
   delete props.allPages
 
   const postsSortByDate = Object.create(props.posts)
