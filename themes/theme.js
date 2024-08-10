@@ -31,6 +31,7 @@ export const getGlobalLayoutByTheme = themeQuery => {
  * @returns
  */
 export const getLayoutByTheme = ({ router, theme }) => {
+  console.log('🚀 ~ file: theme.js:34 ~ getLayoutByTheme ~ router:', router)
   const themeQuery = getQueryParam(router.asPath, 'theme') || theme
   if (themeQuery !== BLOG.THEME) {
     return dynamic(
@@ -70,6 +71,7 @@ export const getLayoutByTheme = ({ router, theme }) => {
  * @returns
  */
 const getLayoutNameByPath = path => {
+  console.log('🚀 ~ file: theme.js:74 ~ getLayoutNameByPath ~ path:', path)
   if (LAYOUT_MAPPINGS[path]) {
     return LAYOUT_MAPPINGS[path]
   } else {

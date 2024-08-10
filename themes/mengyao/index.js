@@ -26,6 +26,7 @@ import { useRouter } from 'next/router'
 import { Transition } from '@headlessui/react'
 import { Style } from './style'
 import { siteConfig } from '@/lib/config'
+import PhotographyList from './components/PhotographyList'
 
 import bg from '@/public/images/mengyao/bg.png'
 import About from './components/About'
@@ -121,6 +122,66 @@ const LayoutBase = props => {
     )
   }
 
+  if (router?.query?.prefix?.includes('article')) {
+    return (
+      <div
+        id="theme-example"
+        className={`${siteConfig('FONT_STYLE')} dark:text-gray-300  bg-white dark:bg-black scroll-smooth`}
+      >
+        <Style />
+
+        {/* 页头 */}
+        {/* <Header {...props} /> */}
+
+        {/* 菜单 */}
+        <Nav isHome={false} {...props} />
+
+        {/* 主体 */}
+        <div id="container-inner" className="w-full relative z-10">
+          {/* 标题栏 */}
+          {/* {fullWidth ? null : <Title {...props} />} */}
+
+          <div
+            id="container-wrapper-article"
+            className={
+              (JSON.parse(siteConfig('LAYOUT_SIDEBAR_REVERSE'))
+                ? 'flex-row-reverse'
+                : '') +
+              'w-full relative mx-auto justify-center md:flex items-start'
+            }
+          >
+            {/* 内容 */}
+            <div className={`w-full`}>
+              <Transition
+                show={!onLoading}
+                appear={true}
+                enter="transition ease-in-out duration-700 transform order-first"
+                enterFrom="opacity-0 translate-y-16"
+                enterTo="opacity-100"
+                leave="transition ease-in-out duration-300 transform"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 -translate-y-16"
+                unmount={false}
+              >
+                {/* 嵌入模块 */}
+                {slotTop}
+                {children}
+              </Transition>
+            </div>
+          </div>
+        </div>
+
+        {/* 页脚 */}
+        <Footer {...props} />
+
+        {/* 回顶按钮 */}
+        <div className="fixed right-4 bottom-4 z-10">
+          <JumpToTopButton />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       id="theme-example"
@@ -150,7 +211,7 @@ const LayoutBase = props => {
         >
           {/* 内容 */}
           <div
-            className={`w-full ${fullWidth ? '' : 'max-w-3xl'} xl:px-14 lg:px-4`}
+            className={`w-full ${fullWidth ? '' : 'max-w-5xl'} xl:px-14 lg:px-4`}
           >
             <Transition
               show={!onLoading}
@@ -195,20 +256,22 @@ const LayoutIndex = props => {
 }
 
 /**
- * 文章列表
+ * 文章列表 /post
  * @param {*} props
  * @returns
  */
 const LayoutPostList = props => {
-  return <div>22222</div>
-  // return <BlogListPage {...props} />
+  // return <div>22222</div>
+  return <BlogListPage {...props} />
 }
 
 /**
+ * /photography
  * @param {*} props
  */
 const LayoutPhotographyList = props => {
-  return <div>111</div>
+  console.log('🚀 ~ file: index.js:272 ~ LayoutPhotographyList ~ props:', props)
+  return <PhotographyList />
 }
 
 /**
@@ -218,6 +281,7 @@ const LayoutPhotographyList = props => {
  */
 const LayoutSlug = props => {
   const { post, lock, validPassword } = props
+  console.log('🚀 ~ file: index.js:221 ~ LayoutSlug ~ props:', props)
   const router = useRouter()
   useEffect(() => {
     // 404
@@ -242,11 +306,19 @@ const LayoutSlug = props => {
       {lock ? (
         <ArticleLock validPassword={validPassword} />
       ) : (
-        <div id="article-wrapper" className="px-2">
-          <ArticleInfo post={post} />
-          <NotionPage post={post} />
-          <ShareBar post={post} />
-          <Comment frontMatter={post} />
+        <div>
+          <img
+            src={post?.pageCover}
+            width={'100%'}
+            style={{ objectFit: 'cover', maxHeight: 700 }}
+          />
+          <div id="article-wrapper" className="px-2 max-w-6xl mx-auto">
+            <NotionPage post={post} />
+            <ArticleInfo post={post} />
+
+            {/* <ShareBar post={post} /> */}
+            {/* <Comment frontMatter={post} /> */}
+          </div>
         </div>
       )}
     </>
